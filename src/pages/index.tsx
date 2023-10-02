@@ -9,7 +9,7 @@ export default function Home() {
   const [alpha, setAlpha] = useState(0);
   const [beta, setBeta] = useState(0);
   const [gamma, setGamma] = useState(0);
-  const [askPermission, setAskPermission] = useState(true);
+  const [askPermission, setAskPermission] = useState(false);
 
   useEffect(() => {
     function handleOrientation(event: any) {
@@ -107,7 +107,7 @@ export default function Home() {
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
     >
-      Hello
+      <button onClick={() => setAskPermission(true)}>Start</button>
       {JSON.stringify({ bearing, alpha, beta, gamma }, null, 2)}
     </main>
   );
