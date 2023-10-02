@@ -1,5 +1,5 @@
 import { Inter } from "next/font/google";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -9,8 +9,9 @@ export default function Home() {
   const [alpha, setAlpha] = useState(0);
   const [beta, setBeta] = useState(0);
   const [gamma, setGamma] = useState(0);
-  const [askPermission, setAskPermission] = useState(false);
 
+  const askPermissionRef = useRef<boolean>(false);
+  const askPermission = askPermissionRef.current;
   useEffect(() => {
     function handleOrientation(event: any) {
       requestAnimationFrame(() => {
@@ -20,7 +21,7 @@ export default function Home() {
         setGamma(event.gamma);
       });
     }
-    function handleOrientationAndorid(event: any) {
+    function handleOrientationAndroid(event: any) {
       requestAnimationFrame(() => {
         if (
           !event.absolute ||
@@ -48,54 +49,11 @@ export default function Home() {
       // });
     }
     if (askPermission) {
-      setAskPermission(false);
-      const tmpIos =
-        navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
-        navigator.userAgent.match(/AppleWebKit/);
-
-      if (tmpIos) {
-        let hasRequestPermission = false;
-        try {
-          hasRequestPermission =
-            typeof DeviceOrientationEvent !== "undefined" &&
-            //@ts-expect-error
-            typeof DeviceOrientationEvent.requestPermission === "function" &&
-            typeof DeviceMotionEvent !== "undefined" &&
-            //@ts-expect-error
-            typeof DeviceMotionEvent.requestPermission === "function";
-        } catch (error) {
-          hasRequestPermission = false;
-        }
-
-        if (!hasRequestPermission) return;
-        //@ts-expect-error
-        DeviceOrientationEvent.requestPermission()
-          .then((response: any) => {
-            if (response === "granted") {
-              window.addEventListener(
-                "deviceorientation",
-                handleOrientation,
-                true
-              );
-            } else {
-              alert("has to be allowed!");
-            }
-          })
-          .catch((err: any) => alert(err));
-        //@ts-expect-error
-        DeviceMotionEvent.requestPermission()
-          .then((response: any) => {
-            if (response === "granted") {
-              window.addEventListener("devicemotion", handleMotion, true);
-            } else {
-              alert("has to be allowed! motion");
-            }
-          })
-          .catch((err: any) => alert(err));
-      } else {
+      askPermissionRef.current = false;
+      {
         window.addEventListener(
           "deviceorientationabsolute",
-          handleOrientationAndorid,
+          handleOrientationAndroid,
           true
         );
         window.addEventListener("devicemotion", handleMotion, true);
@@ -107,7 +65,13 @@ export default function Home() {
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
     >
-      <button onClick={() => setAskPermission(true)}>Start</button>
+      <button
+        onClick={() => {
+          askPermissionRef.current = true;
+        }}
+      >
+        Start
+      </button>
       {JSON.stringify({ bearing, alpha, beta, gamma }, null, 2)}
     </main>
   );
