@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  AbsoluteOrientationSensor,
-  Accelerometer,
-  GravitySensor,
-  Gyroscope,
-  LinearAccelerationSensor,
-  OrientationSensor,
-  RelativeOrientationSensor,
-  Sensor,
-} from "motion-sensors-polyfill";
+
 const Page = () => {
   const [data, setData] = useState<any>({});
   const [error, setError] = useState<any>();
