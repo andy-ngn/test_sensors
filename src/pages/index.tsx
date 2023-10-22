@@ -1,13 +1,16 @@
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
-
+import map from "mapbox-gl";
+import { useEffect, useState } from "react";
 export default function Home() {
+  const [status, setStatus] = useState("Normal");
+  useEffect(() => {
+    if (!map.supported()) {
+      setStatus("GL Not Supported");
+    }
+  }, []);
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    >
-      Helo
+    <main>
+      <h1>Home</h1>
+      <div>Status: {status}</div>
     </main>
   );
 }
