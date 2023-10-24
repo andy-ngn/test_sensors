@@ -134,8 +134,9 @@ const Sensors = ({
 
   return (
     <>
-      <Waveform eaz={eazentry} setVariance={setVariance}></Waveform>
-      <EazIndicator eaz={timestampOfLastAriadnePos} />
+      Sensors
+      {/* <Waveform eaz={eazentry} setVariance={setVariance}></Waveform>
+      <EazIndicator eaz={timestampOfLastAriadnePos} /> */}
     </>
   );
 };
