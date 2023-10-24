@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import map from "mapbox-gl";
 import { useCallback, useEffect, useState } from "react";
 export default function Home() {
@@ -91,11 +92,13 @@ export default function Home() {
       <pre>Data :{JSON.stringify(data, null, 2)}</pre>
 
       <div>
-        <button
+        <Button
           onClick={() => {
             setAsk(true);
           }}
-        ></button>
+        >
+          Start
+        </Button>
       </div>
     </main>
   );
