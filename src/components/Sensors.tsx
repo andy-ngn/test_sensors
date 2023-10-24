@@ -3,18 +3,14 @@
 import { useEffect, useState } from "react";
 
 type Props = {
-  //   viewState: Object;
   setViewState: Function;
   askPermission: boolean;
   setAskPermission: Function;
 };
 
-const Sensors = ({
-  setViewState,
-  askPermission,
-  setAskPermission,
-}: //   viewState,
-Props) => {
+const Sensors = ({ setViewState, askPermission, setAskPermission }: Props) => {
+  const [isIos, setIsIos] = useState("undefined");
+
   useEffect(() => {
     function handleOrientation(event) {
       requestAnimationFrame(() => {
@@ -28,14 +24,6 @@ Props) => {
     }
     function handleOrientationAndorid(event) {
       requestAnimationFrame(() => {
-        // if (
-        //   !event.absolute ||
-        //   event.alpha == null ||
-        //   event.beta == null ||
-        //   event.gamma == null
-        // )
-        //   compass = -(event.alpha + (event.beta * event.gamma) / 90);
-        // compass -= Math.floor(compass / 360) * 360; // Wrap into range [0,360]
         setViewState((prev) => ({
           ...prev,
           alpha: -(event.alpha + (event.beta * event.gamma) / 90),
@@ -54,11 +42,12 @@ Props) => {
         }));
       });
     }
-    if (askPermission) {
+    if (isIos == "undefined" && askPermission) {
       setAskPermission(false);
       const tmpIos =
         navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
         navigator.userAgent.match(/AppleWebKit/);
+      setIsIos(tmpIos);
 
       if (tmpIos) {
         let hasRequestPermission = false;
@@ -106,7 +95,7 @@ Props) => {
       }
     }
     // }
-  }, [setAskPermission]);
+  }, [askPermission, isIos]);
 
   /////////////////////////////////////////////////////////////////////////INCREAS WEIGHTS CLOSE TO PATH LINE STRING
 
