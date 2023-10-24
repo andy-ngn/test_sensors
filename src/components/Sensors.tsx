@@ -1,33 +1,20 @@
 //@ts-nocheck
 
-import { useEffect, useMemo, useState } from "react";
-
-import Waveform from "@/components/waveform";
-import EazIndicator from "@/components/EazIndicator";
+import { useEffect, useState } from "react";
 
 type Props = {
+  //   viewState: Object;
   setViewState: Function;
-  askPermission: boolean;
-  setAskPermission: Function;
+  //   askPermission: boolean;
+  //   setAskPermission: Function;
 };
 
-const Sensors = ({ setViewState, askPermission, setAskPermission }: Props) => {
-  const [Bearing, setBearing] = useState(viewState?.bearing);
-  const [checkStep, setCheckStep] = useState(false);
-
-  const [alpha, setAlpha] = useState(0);
-  const [beta, setBeta] = useState(0);
-  const [gamma, setGamma] = useState(0);
-  const [dax, setDax] = useState(0);
-  const [day, setDay] = useState(0);
-  const [daz, setDaz] = useState(0);
-
-  const [eazentry, setEazentry] = useState(null);
-
-  const [timestampOfLastAriadnePos, setTimestampOfLastAriadnePos] = useState(0);
-
-  const [isIos, setIsIos] = useState("undefined");
-
+const Sensors = ({
+  setViewState,
+}: //   askPermission,
+//   setAskPermission,
+//   viewState,
+Props) => {
   useEffect(() => {
     function handleOrientation(event) {
       requestAnimationFrame(() => {
@@ -67,12 +54,11 @@ const Sensors = ({ setViewState, askPermission, setAskPermission }: Props) => {
         }));
       });
     }
-    if (isIos == "undefined" && askPermission) {
-      setAskPermission(false);
+    if (true) {
+      //   setAskPermission(false);
       const tmpIos =
         navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
         navigator.userAgent.match(/AppleWebKit/);
-      setIsIos(tmpIos);
 
       if (tmpIos) {
         let hasRequestPermission = false;
@@ -120,7 +106,7 @@ const Sensors = ({ setViewState, askPermission, setAskPermission }: Props) => {
       }
     }
     // }
-  }, [askPermission, isIos]);
+  }, []);
 
   /////////////////////////////////////////////////////////////////////////INCREAS WEIGHTS CLOSE TO PATH LINE STRING
 

@@ -103,9 +103,10 @@ export default function Home() {
       </div>
       <div>
         <Sensors
-          askPermission={ask}
-          setAskPermission={setAsk}
+          // askPermission={ask}
+          // setAskPermission={setAsk}
           setViewState={setViewState}
+          // viewState={viewState}
         />
       </div>
       <div>{!viewState ? null : JSON.stringify(viewState, null, 2)}</div>
