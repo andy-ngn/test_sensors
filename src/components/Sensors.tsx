@@ -42,7 +42,6 @@ const Sensors = ({
         setAlpha(event.webkitCompassHeading);
         setBeta(event.beta);
         setGamma(event.gamma);
-        // log(`${event.webkitCompassHeading} , ${Math.abs(event.alpha - 360)}`)
       });
     }
     function handleOrientationAndorid(event) {
@@ -53,15 +52,13 @@ const Sensors = ({
           event.beta == null ||
           event.gamma == null
         )
-          log("running in pc?");
-        let compass = -(event.alpha + (event.beta * event.gamma) / 90);
+          let compass = -(event.alpha + (event.beta * event.gamma) / 90);
         compass -= Math.floor(compass / 360) * 360; // Wrap into range [0,360]
         setViewState({ ...viewState, bearing: compass });
         setBearing(compass);
         setAlpha(compass);
         setBeta(event.beta);
         setGamma(event.gamma);
-        // log(`${event.webkitCompassHeading} , ${Math.abs(event.alpha - 360)}`)
       });
     }
     function handleMotion(event) {
@@ -96,7 +93,6 @@ const Sensors = ({
         DeviceOrientationEvent.requestPermission()
           .then((response) => {
             if (response === "granted") {
-              log("success");
               window.addEventListener(
                 "deviceorientation",
                 handleOrientation,
@@ -111,7 +107,6 @@ const Sensors = ({
         DeviceMotionEvent.requestPermission()
           .then((response) => {
             if (response === "granted") {
-              log("success motion");
               window.addEventListener("devicemotion", handleMotion, true);
             } else {
               alert("has to be allowed! motion");
