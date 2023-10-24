@@ -106,7 +106,6 @@ export default function Home() {
           askPermission={ask}
           setAskPermission={setAsk}
           setViewState={setViewState}
-          viewState={viewState}
         />
       </div>
       <div>{!viewState ? null : JSON.stringify(viewState, null, 2)}</div>

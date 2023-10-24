@@ -6,18 +6,12 @@ import Waveform from "@/components/waveform";
 import EazIndicator from "@/components/EazIndicator";
 
 type Props = {
-  viewState: object;
   setViewState: Function;
   askPermission: boolean;
   setAskPermission: Function;
 };
 
-const Sensors = ({
-  viewState,
-  setViewState,
-  askPermission,
-  setAskPermission,
-}: Props) => {
+const Sensors = ({ setViewState, askPermission, setAskPermission }: Props) => {
   const [Bearing, setBearing] = useState(viewState?.bearing);
   const [checkStep, setCheckStep] = useState(false);
 
@@ -37,12 +31,12 @@ const Sensors = ({
   useEffect(() => {
     function handleOrientation(event) {
       requestAnimationFrame(() => {
-        setViewState({
-          ...viewState,
+        setViewState((prev) => ({
+          ...prev,
           alpha: event.webkitCompassHeading,
           beta: event.beta,
           gamma: event.gamma,
-        });
+        }));
       });
     }
     function handleOrientationAndorid(event) {
@@ -55,25 +49,22 @@ const Sensors = ({
         // )
         //   compass = -(event.alpha + (event.beta * event.gamma) / 90);
         // compass -= Math.floor(compass / 360) * 360; // Wrap into range [0,360]
-        setViewState({
-          ...viewState,
+        setViewState((prev) => ({
+          ...prev,
           alpha: -(event.alpha + (event.beta * event.gamma) / 90),
           beta: event.beta,
           gamma: event.gamma,
-        });
-        // setBearing(compass);
-        // setAlpha(compass);
-        // setBeta(event.beta);
-        // setGamma(event.gamma);
+        }));
       });
     }
     function handleMotion(event) {
       requestAnimationFrame(() => {
-        setDax(event.accelerationIncludingGravity.x);
-        setDay(event.accelerationIncludingGravity.y);
-        setDaz(event.accelerationIncludingGravity.z);
-        setCalcFlag(true);
-        setCheckStep(true);
+        setViewState((prev) => ({
+          ...prev,
+          Dax: event.accelerationIncludingGravity.x,
+          Day: event.accelerationIncludingGravity.y,
+          Daz: event.accelerationIncludingGravity.z,
+        }));
       });
     }
     if (isIos == "undefined" && askPermission) {
