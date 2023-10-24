@@ -37,13 +37,34 @@ const Sensors = ({
   useEffect(() => {
     function handleOrientation(event) {
       requestAnimationFrame(() => {
-        setViewState({ ...viewState, ...event });
+        setViewState({
+          ...viewState,
+          alpha: event.webkitCompassHeading,
+          beta: event.beta,
+          gamma: event.gamma,
+        });
       });
     }
     function handleOrientationAndorid(event) {
-      let compass = 0;
       requestAnimationFrame(() => {
-        setViewState({ ...viewState, ...event });
+        // if (
+        //   !event.absolute ||
+        //   event.alpha == null ||
+        //   event.beta == null ||
+        //   event.gamma == null
+        // )
+        //   compass = -(event.alpha + (event.beta * event.gamma) / 90);
+        // compass -= Math.floor(compass / 360) * 360; // Wrap into range [0,360]
+        setViewState({
+          ...viewState,
+          alpha: -(event.alpha + (event.beta * event.gamma) / 90),
+          beta: event.beta,
+          gamma: event.gamma,
+        });
+        // setBearing(compass);
+        // setAlpha(compass);
+        // setBeta(event.beta);
+        // setGamma(event.gamma);
       });
     }
     function handleMotion(event) {
