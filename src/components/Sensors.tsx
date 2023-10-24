@@ -51,14 +51,15 @@ const Sensors = ({
           event.alpha == null ||
           event.beta == null ||
           event.gamma == null
-        )
+        ) {
           let compass = -(event.alpha + (event.beta * event.gamma) / 90);
-        compass -= Math.floor(compass / 360) * 360; // Wrap into range [0,360]
-        setViewState({ ...viewState, bearing: compass });
-        setBearing(compass);
-        setAlpha(compass);
-        setBeta(event.beta);
-        setGamma(event.gamma);
+          compass -= Math.floor(compass / 360) * 360; // Wrap into range [0,360]
+          setViewState({ ...viewState, bearing: compass });
+          setBearing(compass);
+          setAlpha(compass);
+          setBeta(event.beta);
+          setGamma(event.gamma);
+        }
       });
     }
     function handleMotion(event) {
