@@ -5,15 +5,15 @@ import { useEffect, useState } from "react";
 type Props = {
   //   viewState: Object;
   setViewState: Function;
-  //   askPermission: boolean;
-  //   setAskPermission: Function;
+  askPermission: boolean;
+  setAskPermission: Function;
 };
 
 const Sensors = ({
   setViewState,
-}: //   askPermission,
-//   setAskPermission,
-//   viewState,
+  askPermission,
+  setAskPermission,
+}: //   viewState,
 Props) => {
   useEffect(() => {
     function handleOrientation(event) {
@@ -54,8 +54,8 @@ Props) => {
         }));
       });
     }
-    if (true) {
-      //   setAskPermission(false);
+    if (askPermission) {
+      setAskPermission(false);
       const tmpIos =
         navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
         navigator.userAgent.match(/AppleWebKit/);
@@ -106,7 +106,7 @@ Props) => {
       }
     }
     // }
-  }, []);
+  }, [setAskPermission]);
 
   /////////////////////////////////////////////////////////////////////////INCREAS WEIGHTS CLOSE TO PATH LINE STRING
 

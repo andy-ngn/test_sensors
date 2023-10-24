@@ -103,8 +103,8 @@ export default function Home() {
       </div>
       <div>
         <Sensors
-          // askPermission={ask}
-          // setAskPermission={setAsk}
+          askPermission={ask}
+          setAskPermission={setAsk}
           setViewState={setViewState}
           // viewState={viewState}
         />
