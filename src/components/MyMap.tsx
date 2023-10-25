@@ -68,9 +68,9 @@ const MapBox: React.FC<{
       requestAnimationFrame(() => {
         setSensorsData((prev) => ({
           ...prev,
-          Dax: event.accelerationIncludingGravity.x,
-          Day: event.accelerationIncludingGravity.y,
-          Daz: event.accelerationIncludingGravity.z,
+          dax: event.accelerationIncludingGravity.x,
+          day: event.accelerationIncludingGravity.y,
+          daz: event.accelerationIncludingGravity.z,
         }));
       });
     }
@@ -170,60 +170,65 @@ const MapBox: React.FC<{
   }, [sensorsData, selectedCoord]);
 
   return (
-    <div className='relative w-full aspect-video'>
-      <Map
-        ref={(ref) => {
-          if (ref) {
-            setMapInstance(ref);
-          }
-        }}
-        onMouseMove={(e) => {
-          const { lat, lng } = e.lngLat;
-          setCoord({ lat, lng });
-        }}
-        onClick={(e) => {
-          const { lat, lng } = e.lngLat;
-          setSelectedCoord({ lat, lng });
-        }}
-        initialViewState={{
-          bearing: 0,
-          zoom: 19,
-          latitude: 48.173623,
-          longitude: 11.589739,
-          pitch: 0,
-        }}
-        reuseMaps
-        styleDiffing
-        mapboxAccessToken='pk.eyJ1IjoiaWI5OCIsImEiOiJjbGhhbTRuaXUwOGliM2Ruc3h2YTFoMG9yIn0.YtRfHX0vI6aXB6WBD6hajg'
-        mapStyle={`mapbox://styles/mapbox/dark-v11`}
-        preserveDrawingBuffer
-        antialias
-      >
-        <DeckGLOverlay layers={layers} interleaved />
-        <NavigationControl position='top-left' />
+    <Map
+      ref={(ref) => {
+        if (ref) {
+          setMapInstance(ref);
+        }
+      }}
+      style={{ position: "absolute", height: "100vh", width: "100vw" }}
+      onMouseMove={(e) => {
+        const { lat, lng } = e.lngLat;
+        setCoord({ lat, lng });
+      }}
+      onClick={(e) => {
+        const { lat, lng } = e.lngLat;
+        setSelectedCoord({ lat, lng });
+      }}
+      initialViewState={{
+        bearing: 0,
+        zoom: 19,
+        latitude: 48.173623,
+        longitude: 11.589739,
+        pitch: 0,
+      }}
+      reuseMaps
+      styleDiffing
+      mapboxAccessToken='pk.eyJ1IjoiaWI5OCIsImEiOiJjbGhhbTRuaXUwOGliM2Ruc3h2YTFoMG9yIn0.YtRfHX0vI6aXB6WBD6hajg'
+      mapStyle={`mapbox://styles/mapbox/dark-v11`}
+      preserveDrawingBuffer
+      antialias
+    >
+      <DeckGLOverlay layers={layers} interleaved />
+      <NavigationControl position='top-left' />
 
-        <Card className='absolute top-3 right-3 p-3 z-5 w-[400px]'>
-          <CardContent>
-            <div>
-              <Button
-                onClick={() => {
-                  setAskPermission(true);
-                }}
-                size='sm'
-              >
-                Start
-              </Button>
-            </div>
-            <div>
-              Real coords: {currentCoord && JSON.stringify(currentCoord)}
-            </div>
-            <div>
-              Sensors : {sensorsData && JSON.stringify(sensorsData, null, 2)}
-            </div>
-          </CardContent>
-        </Card>
-      </Map>
-    </div>
+      <Card className='absolute top-3 right-3 p-3 z-5 w-2/3'>
+        <CardContent>
+          <div>
+            <Button
+              onClick={() => {
+                setAskPermission(true);
+              }}
+              size='sm'
+            >
+              Start
+            </Button>
+          </div>
+          <div>
+            Real coords:
+            {currentCoord && (
+              <div>
+                <div>lat: {currentCoord.lat}</div>
+                <div>lng: {currentCoord.lng}</div>
+              </div>
+            )}
+          </div>
+          <div>
+            Sensors : {sensorsData && JSON.stringify(sensorsData, null, 2)}
+          </div>
+        </CardContent>
+      </Card>
+    </Map>
   );
 };
 
