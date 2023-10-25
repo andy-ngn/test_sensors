@@ -11,7 +11,7 @@ import { GeoJsonLayer, IconLayer, TextLayer } from "@deck.gl/layers/typed";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Map, MapRef, NavigationControl } from "react-map-gl";
 
 import { Card, CardContent } from "./ui/card";
@@ -43,37 +43,37 @@ const MapBox: React.FC<{
     lat: 48.173623,
     lng: 11.589739,
   });
+  const handleOrientation = useCallback((event: any) => {
+    requestAnimationFrame(() => {
+      setSensorsData((prev) => ({
+        ...prev,
+        alpha: event.webkitCompassHeading,
+        beta: event.beta,
+        gamma: event.gamma,
+      }));
+    });
+  }, []);
+  const handleOrientationAndorid = useCallback((event: any) => {
+    requestAnimationFrame(() => {
+      setSensorsData((prev) => ({
+        ...prev,
+        alpha: -(event.alpha + (event.beta * event.gamma) / 90),
+        beta: event.beta,
+        gamma: event.gamma,
+      }));
+    });
+  }, []);
+  const handleMotion = useCallback((event: any) => {
+    requestAnimationFrame(() => {
+      setSensorsData((prev) => ({
+        ...prev,
+        dax: event.accelerationIncludingGravity.x,
+        day: event.accelerationIncludingGravity.y,
+        daz: event.accelerationIncludingGravity.z,
+      }));
+    });
+  }, []);
   useEffect(() => {
-    function handleOrientation(event: any) {
-      requestAnimationFrame(() => {
-        setSensorsData((prev) => ({
-          ...prev,
-          alpha: event.webkitCompassHeading,
-          beta: event.beta,
-          gamma: event.gamma,
-        }));
-      });
-    }
-    function handleOrientationAndorid(event: any) {
-      requestAnimationFrame(() => {
-        setSensorsData((prev) => ({
-          ...prev,
-          alpha: -(event.alpha + (event.beta * event.gamma) / 90),
-          beta: event.beta,
-          gamma: event.gamma,
-        }));
-      });
-    }
-    function handleMotion(event: any) {
-      requestAnimationFrame(() => {
-        setSensorsData((prev) => ({
-          ...prev,
-          dax: event.accelerationIncludingGravity.x,
-          day: event.accelerationIncludingGravity.y,
-          daz: event.accelerationIncludingGravity.z,
-        }));
-      });
-    }
     if (askPermission) {
       setAskPermission(false);
       const tmpIos =

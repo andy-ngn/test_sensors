@@ -5,14 +5,24 @@ const MyMap = dynamic(() => import("@/components/MyMap"), { ssr: false });
 import { useState } from "react";
 export default function Home() {
   const [ask, setAsk] = useState(false);
-  const [viewState, setViewState] = useState<Object>({});
+  const [isClick, setIsClick] = useState(false);
 
   return (
     <main>
       <div>
         <MyMap askPermission={ask} setAskPermission={setAsk} />
       </div>
-      <div>{!viewState ? null : JSON.stringify(viewState, null, 2)}</div>
+      {!ask && !isClick && (
+        <div
+          onClick={() => {
+            setAsk(true);
+            setIsClick(true);
+          }}
+          className='absolute top-0 left-0 h-screen w-screen bg-slate-400 text-yellow-400 opacity-60 z-[1000] cursor-pointer'
+        >
+          Click
+        </div>
+      )}
     </main>
   );
 }
