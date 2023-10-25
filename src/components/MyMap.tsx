@@ -142,7 +142,7 @@ const MapBox: React.FC<{}> = ({}) => {
   useEffect(() => {
     if (!selectedCoord) return;
     const { lat, lng } = selectedCoord;
-    const angle = sensorsData?.alpha ?? 0;
+    const angle = sensorsData?.alpha ? 360 - sensorsData.alpha : 0;
     const current_position = new IconLayer({
       id: `currentPositionLayer_arrow`,
       data: [{ coord: [lng, lat] }],
