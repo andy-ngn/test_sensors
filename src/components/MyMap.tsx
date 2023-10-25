@@ -19,10 +19,9 @@ import { Card, CardContent } from "./ui/card";
 import DeckGLOverlay from "./MapboxOverlay";
 import { Button } from "./ui/button";
 
-const MapBox: React.FC<{
-  askPermission: boolean;
-  setAskPermission: Function;
-}> = ({ askPermission, setAskPermission }) => {
+const MapBox: React.FC<{}> = ({}) => {
+  const [askPermission, setAskPermission] = useState(false);
+  const [isClick, setIsClick] = useState(false);
   const [mapInstance, setMapInstance] = useState<MapRef | null>(null);
   const [layers, setLayers] = useState<Array<any>>([]);
   const [sensorsData, setSensorsData] = useState<{
@@ -31,7 +30,7 @@ const MapBox: React.FC<{
     dax?: number;
     day?: number;
     daz?: number;
-  }>({});
+  }>({ alpha: 0, beta: 0, dax: 0, day: 0, daz: 0 });
   const [currentCoord, setCoord] = useState<{ lat: number; lng: number }>({
     lat: 48.173623,
     lng: 11.589739,
@@ -170,65 +169,78 @@ const MapBox: React.FC<{
   }, [sensorsData, selectedCoord]);
 
   return (
-    <Map
-      ref={(ref) => {
-        if (ref) {
-          setMapInstance(ref);
-        }
-      }}
-      style={{ position: "absolute", height: "100vh", width: "100vw" }}
-      onMouseMove={(e) => {
-        const { lat, lng } = e.lngLat;
-        setCoord({ lat, lng });
-      }}
-      onClick={(e) => {
-        const { lat, lng } = e.lngLat;
-        setSelectedCoord({ lat, lng });
-      }}
-      initialViewState={{
-        bearing: 0,
-        zoom: 19,
-        latitude: 48.173623,
-        longitude: 11.589739,
-        pitch: 0,
-      }}
-      reuseMaps
-      styleDiffing
-      mapboxAccessToken='pk.eyJ1IjoiaWI5OCIsImEiOiJjbGhhbTRuaXUwOGliM2Ruc3h2YTFoMG9yIn0.YtRfHX0vI6aXB6WBD6hajg'
-      mapStyle={`mapbox://styles/mapbox/dark-v11`}
-      preserveDrawingBuffer
-      antialias
-    >
-      <DeckGLOverlay layers={layers} interleaved />
-      <NavigationControl position='top-left' />
+    <>
+      <Map
+        ref={(ref) => {
+          if (ref) {
+            setMapInstance(ref);
+          }
+        }}
+        style={{ position: "absolute", height: "100vh", width: "100vw" }}
+        onMouseMove={(e) => {
+          const { lat, lng } = e.lngLat;
+          setCoord({ lat, lng });
+        }}
+        onClick={(e) => {
+          const { lat, lng } = e.lngLat;
+          setSelectedCoord({ lat, lng });
+        }}
+        initialViewState={{
+          bearing: 0,
+          zoom: 19,
+          latitude: 48.173623,
+          longitude: 11.589739,
+          pitch: 0,
+        }}
+        reuseMaps
+        styleDiffing
+        mapboxAccessToken='pk.eyJ1IjoiaWI5OCIsImEiOiJjbGhhbTRuaXUwOGliM2Ruc3h2YTFoMG9yIn0.YtRfHX0vI6aXB6WBD6hajg'
+        mapStyle={`mapbox://styles/mapbox/dark-v11`}
+        preserveDrawingBuffer
+        antialias
+      >
+        <DeckGLOverlay layers={layers} interleaved />
+        <NavigationControl position='top-left' />
 
-      <Card className='absolute top-3 right-3 p-3 z-5 w-2/3'>
-        <CardContent>
-          <div>
-            <Button
-              onClick={() => {
-                setAskPermission(true);
-              }}
-              size='sm'
-            >
-              Start
-            </Button>
-          </div>
-          <div>
-            Real coords:
-            {currentCoord && (
-              <div>
-                <div>lat: {currentCoord.lat}</div>
-                <div>lng: {currentCoord.lng}</div>
-              </div>
-            )}
-          </div>
-          <div>
-            Sensors : {sensorsData && JSON.stringify(sensorsData, null, 2)}
-          </div>
-        </CardContent>
-      </Card>
-    </Map>
+        <Card className='absolute top-3 right-3 p-3 z-5 w-2/3'>
+          <CardContent>
+            <div>
+              <Button
+                onClick={() => {
+                  setAskPermission(true);
+                }}
+                size='sm'
+              >
+                Start
+              </Button>
+            </div>
+            <div>
+              Real coords:
+              {currentCoord && (
+                <div>
+                  <div>lat: {currentCoord.lat}</div>
+                  <div>lng: {currentCoord.lng}</div>
+                </div>
+              )}
+            </div>
+            <div>
+              Sensors : {sensorsData && JSON.stringify(sensorsData, null, 2)}
+            </div>
+          </CardContent>
+        </Card>
+      </Map>
+      {!askPermission && !isClick && (
+        <div
+          onClick={() => {
+            setAskPermission(true);
+            setIsClick(true);
+          }}
+          className='absolute top-0 left-0 h-screen w-screen bg-slate-400 text-yellow-400 opacity-60 z-[1000] cursor-pointer'
+        >
+          Click
+        </div>
+      )}
+    </>
   );
 };
 
