@@ -9,8 +9,6 @@ type Props = {
 };
 
 const Sensors = ({ setViewState, askPermission, setAskPermission }: Props) => {
-  const [isIos, setIsIos] = useState("undefined");
-
   useEffect(() => {
     function handleOrientation(event) {
       requestAnimationFrame(() => {
@@ -42,12 +40,11 @@ const Sensors = ({ setViewState, askPermission, setAskPermission }: Props) => {
         }));
       });
     }
-    if (isIos == "undefined" && askPermission) {
+    if (askPermission) {
       setAskPermission(false);
       const tmpIos =
         navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
         navigator.userAgent.match(/AppleWebKit/);
-      setIsIos(tmpIos);
 
       if (tmpIos) {
         let hasRequestPermission = false;
@@ -95,17 +92,11 @@ const Sensors = ({ setViewState, askPermission, setAskPermission }: Props) => {
       }
     }
     // }
-  }, [askPermission, isIos]);
+  }, [setAskPermission]);
 
   /////////////////////////////////////////////////////////////////////////INCREAS WEIGHTS CLOSE TO PATH LINE STRING
 
-  return (
-    <>
-      Sensors
-      {/* <Waveform eaz={eazentry} setVariance={setVariance}></Waveform>
-      <EazIndicator eaz={timestampOfLastAriadnePos} /> */}
-    </>
-  );
+  return <>Sensors</>;
 };
 
 export default Sensors;
