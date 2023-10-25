@@ -20,17 +20,21 @@ import DeckGLOverlay from "./MapboxOverlay";
 import { Button } from "./ui/button";
 
 const MapBox: React.FC<{}> = ({}) => {
-  const [askPermission, setAskPermission] = useState(false);
-  const [isClick, setIsClick] = useState(false);
+  const [permissionState, setPermissionState] = useState<{
+    isFirstClicked: boolean;
+    askingPermission: boolean;
+  }>({ askingPermission: false, isFirstClicked: false });
+
   const [mapInstance, setMapInstance] = useState<MapRef | null>(null);
   const [layers, setLayers] = useState<Array<any>>([]);
   const [sensorsData, setSensorsData] = useState<{
     alpha?: number;
     beta?: number;
+    gamma?: number;
     dax?: number;
     day?: number;
     daz?: number;
-  }>({ alpha: 0, beta: 0, dax: 0, day: 0, daz: 0 });
+  }>({ alpha: 0, beta: 0, gamma: 0, dax: 0, day: 0, daz: 0 });
   const [currentCoord, setCoord] = useState<{ lat: number; lng: number }>({
     lat: 48.173623,
     lng: 11.589739,
@@ -52,7 +56,7 @@ const MapBox: React.FC<{}> = ({}) => {
       }));
     });
   }, []);
-  const handleOrientationAndorid = useCallback((event: any) => {
+  const handleOrientationAndroid = useCallback((event: any) => {
     requestAnimationFrame(() => {
       setSensorsData((prev) => ({
         ...prev,
@@ -72,9 +76,11 @@ const MapBox: React.FC<{}> = ({}) => {
       }));
     });
   }, []);
+
   useEffect(() => {
-    if (askPermission) {
-      setAskPermission(false);
+    if (permissionState.askingPermission) {
+      setPermissionState({ isFirstClicked: true, askingPermission: false });
+
       const tmpIos =
         navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
         navigator.userAgent.match(/AppleWebKit/);
@@ -121,15 +127,18 @@ const MapBox: React.FC<{}> = ({}) => {
       } else {
         window.addEventListener(
           "deviceorientationabsolute",
-          handleOrientationAndorid,
+          handleOrientationAndroid,
           true
         );
         window.addEventListener("devicemotion", handleMotion, true);
       }
     }
-    // }
-  }, [setAskPermission]);
-
+  }, [
+    handleMotion,
+    handleOrientation,
+    handleOrientationAndroid,
+    permissionState,
+  ]);
   useEffect(() => {
     if (!selectedCoord) return;
     const { lat, lng } = selectedCoord;
@@ -207,7 +216,10 @@ const MapBox: React.FC<{}> = ({}) => {
             <div>
               <Button
                 onClick={() => {
-                  setAskPermission(true);
+                  setPermissionState({
+                    isFirstClicked: true,
+                    askingPermission: true,
+                  });
                 }}
                 size='sm'
               >
@@ -229,11 +241,13 @@ const MapBox: React.FC<{}> = ({}) => {
           </CardContent>
         </Card>
       </Map>
-      {!askPermission && !isClick && (
+      {!permissionState.isFirstClicked && (
         <div
           onClick={() => {
-            setAskPermission(true);
-            setIsClick(true);
+            setPermissionState({
+              isFirstClicked: true,
+              askingPermission: true,
+            });
           }}
           className='absolute top-0 left-0 h-screen w-screen bg-slate-400 text-yellow-400 opacity-60 z-[1000] cursor-pointer'
         >
