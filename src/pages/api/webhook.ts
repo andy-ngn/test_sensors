@@ -20,35 +20,35 @@ const handler: NextApiHandler = async (req, res) => {
           let from = req.body.entry[0].changes[0].value.messages[0].from; // extract the phone number from the webhook payload
           let msg_body =
             req.body.entry[0].changes[0].value.messages[0].text.body; // extract the message text from the webhook payload
-          // axios({
-          //   method: "POST", // Required, HTTP method, a string, e.g. POST, GET
-          //   url:
-          //     "https://graph.facebook.com/v12.0/" +
-          //     phone_number_id +
-          //     "/messages?access_token=" +
-          //     token,
-          //   data: {
-          //     messaging_product: "whatsapp",
-          //     to: from,
-          //     text: { body: "Ack: " + msg_body },
-          //   },
-          //   headers: { "Content-Type": "application/json" },
-          // });
-          await axios.post(
-            `https://graph.facebook.com/v17.0/${phone_number_id}/messages/?access_token=${token}`,
-            {
+          axios({
+            method: "POST", // Required, HTTP method, a string, e.g. POST, GET
+            url:
+              "https://graph.facebook.com/v12.0/" +
+              phone_number_id +
+              "/messages?access_token=" +
+              token,
+            data: {
               messaging_product: "whatsapp",
               to: from,
-              type: "template",
-              template: { name: "ariadne_nav", language: { code: "en_US" } },
+              text: { body: "Ack: " + msg_body },
             },
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + token,
-              },
-            }
-          );
+            headers: { "Content-Type": "application/json" },
+          });
+          // await axios.post(
+          //   `https://graph.facebook.com/v17.0/${phone_number_id}/messages/?access_token=${token}`,
+          //   {
+          //     messaging_product: "whatsapp",
+          //     to: from,
+          //     type: "template",
+          //     template: { name: "ariadne_nav", language: { code: "en_US" } },
+          //   },
+          //   {
+          //     headers: {
+          //       "Content-Type": "application/json",
+          //       Authorization: "Bearer " + token,
+          //     },
+          //   }
+          // );
         }
         return res.status(200).send("OK");
       } else {
