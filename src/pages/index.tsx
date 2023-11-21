@@ -6,7 +6,11 @@ import Sensors from "@/components/Sensors";
 export default function Home() {
   return (
     <main>
-      <div>Hello</div>
+      <div className='container flex justify-center items-center'>
+        <a href='https://wa.me/15550517359' target='_blank'>
+          Open
+        </a>
+      </div>
     </main>
   );
 }

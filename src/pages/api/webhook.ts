@@ -1,8 +1,10 @@
 import type { NextApiHandler } from "next";
 import axios from "axios";
 const api_token =
-  "EAASemvjYD9cBO2saAfQ9e17OVScAwdD3lTJ9zZC3F7P46nueS7ZC0xlXAL4IUO0AQZCvPbG2thIkhNFRNneD8Fy0FXoCz3EB2N1LxpKqwY77OyBMYd8TWZAteiuq3Ag5ijV62LxznO5nW4pniaN4lw3DvOfIl01oIZCEjnOrIHsjZAIWe3WjAA1yCjo5Ezv7zmhmUGW7ZAFFn210TOVSoMZD";
+  "EAASemvjYD9cBOxXJYpt9ISxGSAbphTJjZBUzWz4KIBgNgxv1zfdG86ZAgwhBvx2FT12SYq6RmALs07vYZALJD2ZA1l47llTa6QqmTprh8h6ZCv93UqjtlnDstSpOQua6mVgeFNSrkXNljyjpOkMkTRTsE7FIZB9FNHejw6kGmsFVDZAeO8xBDEiVoqid2fWMFwljyszTxqOyLeZCvnZCwaoDN";
 const handler: NextApiHandler = async (req, res) => {
+  console.log("headers: ", req.headers);
+  console.log("body: ", req.body);
   try {
     const result = await axios.post(
       "https://graph.facebook.com/v17.0/117329494728345/messages",
