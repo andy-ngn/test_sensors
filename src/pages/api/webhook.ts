@@ -21,22 +21,38 @@ const handler: NextApiHandler = async (req, res) => {
           let from = req.body.entry[0].changes[0].value.messages[0].from; // extract the phone number from the webhook payload
           let msg_body =
             req.body.entry[0].changes[0].value.messages[0].text.body; // extract the message text from the webhook payload
-          axios({
-            method: "POST", // Required, HTTP method, a string, e.g. POST, GET
-            url:
-              "https://graph.facebook.com/v12.0/" +
-              phone_number_id +
-              "/messages?access_token=" +
-              token,
-            data: {
+          // axios({
+          //   method: "POST", // Required, HTTP method, a string, e.g. POST, GET
+          //   url:
+          //     "https://graph.facebook.com/v12.0/" +
+          //     phone_number_id +
+          //     "/messages?access_token=" +
+          //     token,
+          //   data: {
+          //     messaging_product: "whatsapp",
+          //     to: from,
+          //     text: { body: "Ack: " + msg_body },
+          //   },
+          //   headers: { "Content-Type": "application/json" },
+          // });
+          const results = await axios.post(
+            `https://graph.facebook.com/v17.0/117329494728345/messages`,
+            {
               messaging_product: "whatsapp",
-              to: from,
-              text: { body: "Ack: " + msg_body },
+              to: "4917641317141",
+              type: "template",
+              template: { name: "ariadne_nav", language: { code: "en_US" } },
             },
-            headers: { "Content-Type": "application/json" },
-          });
+            {
+              headers: {
+                Authorization: "Bearer " + token,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          console.log(results.data);
+          return res.status(200).json(results.data);
         }
-        return res.status(200).send("OK");
       } else {
         // Return a '404 Not Found' if event is not from a WhatsApp API
         throw { status: 404, message: "No" };
