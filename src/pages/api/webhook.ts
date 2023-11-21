@@ -7,58 +7,40 @@ const handler: NextApiHandler = async (req, res) => {
     if (req.method === "POST") {
       let body = req.body;
       console.log(JSON.stringify(req.body, null, 2));
-      let from = req.body.entry[0].changes[0].value.messages[0].from; // extract the phone number from the webhook payload
-      let phone_number_id =
-        req.body.entry[0].changes[0].value.metadata.phone_number_id;
-      await axios.post(
-        `https://graph.facebook.com/v17.0/${phone_number_id}/messages/?access_token=${token}`,
-        {
-          messaging_product: "whatsapp",
-          to: from,
-          type: "template",
-          template: { name: "ariadne_nav", language: { code: "en_US" } },
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
-      // if (req.body.object) {
-      //   if (
-      //     req.body.entry &&
-      //     req.body.entry[0].changes &&
-      //     req.body.entry[0].changes[0] &&
-      //     req.body.entry[0].changes[0].value.messages &&
-      //     req.body.entry[0].changes[0].value.messages[0]
-      //   ) {
-      // let phone_number_id =
-      //   req.body.entry[0].changes[0].value.metadata.phone_number_id;
-      // let from = req.body.entry[0].changes[0].value.messages[0].from; // extract the phone number from the webhook payload
-      //     let msg_body =
-      //       req.body.entry[0].changes[0].value.messages[0].text.body; // extract the message text from the webhook payload
-      //     axios({
-      //       method: "POST", // Required, HTTP method, a string, e.g. POST, GET
-      //       url:
-      //         "https://graph.facebook.com/v12.0/" +
-      //         phone_number_id +
-      //         "/messages?access_token=" +
-      //         token,
-      //       data: {
-      //         messaging_product: "whatsapp",
-      //         to: from,
-      //         text: { body: "Ack: " + msg_body },
-      //       },
-      //       headers: { "Content-Type": "application/json" },
-      //     });
 
-      //   }
-      //   return res.status(200).send("OK");
-      // } else {
-      //   // Return a '404 Not Found' if event is not from a WhatsApp API
-      //   throw { status: 404, message: "No" };
-      // }
+      if (req.body) {
+        if (
+          req.body.entry &&
+          req.body.entry[0].changes &&
+          req.body.entry[0].changes[0] &&
+          req.body.entry[0].changes[0].value.messages &&
+          req.body.entry[0].changes[0].value.messages[0]
+        ) {
+          let phone_number_id =
+            req.body.entry[0].changes[0].value.metadata.phone_number_id;
+          let from = req.body.entry[0].changes[0].value.messages[0].from; // extract the phone number from the webhook payload
+          let msg_body =
+            req.body.entry[0].changes[0].value.messages[0].text.body; // extract the message text from the webhook payload
+          axios({
+            method: "POST", // Required, HTTP method, a string, e.g. POST, GET
+            url:
+              "https://graph.facebook.com/v12.0/" +
+              phone_number_id +
+              "/messages?access_token=" +
+              token,
+            data: {
+              messaging_product: "whatsapp",
+              to: from,
+              text: { body: "Ack: " + msg_body },
+            },
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+        return res.status(200).send("OK");
+      } else {
+        // Return a '404 Not Found' if event is not from a WhatsApp API
+        throw { status: 404, message: "No" };
+      }
     } else if (req.method === "GET") {
       const verify_token = "some_token";
       let mode = req.query["hub.mode"];
@@ -82,3 +64,43 @@ const handler: NextApiHandler = async (req, res) => {
 };
 
 export default handler;
+
+const bodytype = {
+  object: "whatsapp_business_account",
+  entry: [
+    {
+      id: "112258665239838",
+      changes: [
+        {
+          value: {
+            messaging_product: "whatsapp",
+            metadata: {
+              display_phone_number: "15550517359",
+              phone_number_id: "117329494728345",
+            },
+            contacts: [
+              {
+                profile: {
+                  name: "Andyy",
+                },
+                wa_id: "4917641317141",
+              },
+            ],
+            messages: [
+              {
+                from: "4917641317141",
+                id: "wamid.HBgNNDkxNzY0MTMxNzE0MRUCABIYIEJDNjk1MDlEQTMxODBEMkNCRjIyMjBFQkE4NUY1MTkzAA==",
+                timestamp: "1700566165",
+                text: {
+                  body: "Gbc",
+                },
+                type: "text",
+              },
+            ],
+          },
+          field: "messages",
+        },
+      ],
+    },
+  ],
+};
