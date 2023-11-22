@@ -12,7 +12,9 @@ const handler: NextApiHandler = async (req, res) => {
         from: "whatsapp:+14155238886",
         to: "whatsapp:+4917641317141",
       });
+      return res.status(200).end();
     } else if (req.method === "GET") {
+      return res.status(200).end();
     } else throw { status: 403, message: "Wrong method" };
   } catch (error) {
     console.log(error.message);
