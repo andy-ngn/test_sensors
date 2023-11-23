@@ -1,3 +1,4 @@
+import axios from "axios";
 import type { NextApiHandler } from "next";
 import Twilio from "twilio";
 const accountSid = "AC3bc0e6db5c17dd06022752437a3c9178";
@@ -18,11 +19,15 @@ const handler: NextApiHandler = async (req, res) => {
     const client = Twilio(accountSid, authToken);
     if (req.method === "POST") {
       const { Body, From, To, Wald, ProfileName } = req.body as Payload;
-      const findHashId = Body.split(":")[0];
+      const received_token = Body.split(":")[0];
+      const phone_number = From.replace("whatsapp", "");
+      const { data: dmmaResult } = await axios.post(
+        `https://dmma.ariadne.inc/index.php/api/wa?tok=${received_token}&msisdn=${phone_number}`
+      );
       await client.messages.create({
         body:
-          `Hello ${ProfileName}, this is Ariadne.\n` + findHashId
-            ? `Checkout our Navigation at: https://nav.ariadne.inc/${findHashId}`
+          `Hello ${ProfileName}, this is Ariadne.\n` + received_token
+            ? `Checkout our Navigation at: https://nav.ariadne.inc/${received_token}`
             : ``,
         from: To,
         to: From,

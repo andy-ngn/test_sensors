@@ -10,6 +10,9 @@ export default function Home() {
         <a href='https://wa.me/15550517359' target='_blank'>
           Open
         </a>
+        <a href='sms:+4917641317141' target='_blank'>
+          SMS
+        </a>
       </div>
     </main>
   );
