@@ -17,7 +17,7 @@ const Page = () => {
       },
       label: {
         ellipsis: "truncate",
-        position: "outside",
+
         //   position: ["outside"],
         fontSize: 12,
         formatter: (param) => {
@@ -123,12 +123,12 @@ const Page = () => {
   useEffect(() => {
     if (!data) return;
 
-    setOption((prev) => {
-      return {
-        ...prev,
-        series: { ...prev.series, data: data.nodes, links: data.links },
-      };
-    });
+    // setOption((prev) => {
+    //   return {
+    //     ...prev,
+    //     series: { ...prev.series, data: data.nodes, links: data.links },
+    //   };
+    // });
   }, [data]);
 
   return (
